@@ -5,7 +5,6 @@ import java.util.List;
 import com.hqc.beck.dto.ProductDTO;
 import com.hqc.beck.request.ProductRequest;
 
-
 public interface IProductService {
 
     List<ProductDTO> list() throws Exception;

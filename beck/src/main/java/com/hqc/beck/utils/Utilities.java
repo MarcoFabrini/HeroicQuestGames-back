@@ -181,8 +181,8 @@ public class Utilities {
         .map(p -> new ProductDTO(
             p.getId(),
             p.getName(),
-            p.getMinAge(),
-            p.getPrice()))
+            p.getPrice(),
+            buildCategoriesDTO(p.getListCategory())))
         .collect(Collectors.toList());
   }// List buildProductDTO
 
@@ -250,8 +250,6 @@ public class Utilities {
             re.getScore(),
             re.getDescription(),
             re.getCreatedAt(),
-            buildProductDTOid(re.getProduct()),
-            buildOrdersDTO(re.getOrder()),
             re.getActive()))
         .collect(Collectors.toList());
   }// buildReviewsDTO

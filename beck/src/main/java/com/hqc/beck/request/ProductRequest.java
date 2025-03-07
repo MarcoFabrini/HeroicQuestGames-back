@@ -1,6 +1,7 @@
 package com.hqc.beck.request;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,8 +31,7 @@ public class ProductRequest {
     private Double price;
     private Boolean active;
     private Integer editorsId;
-    private Integer authorsId;
-    private Integer categoryId;
-    private Integer reviewsId;
+    private List<Integer> authorsId;
+    private List<Integer> categoryId;
 
 }// class

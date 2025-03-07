@@ -35,11 +35,11 @@ public class ProductDTO {
     private List<CategoriesDTO> listCategoryDTO;
     private List<ReviewsDTO> listReviewsDTO;
 
-    public ProductDTO(Integer id, String name, Integer minAge, Double price) {
+    public ProductDTO(Integer id, String name, Double price, List<CategoriesDTO> listCategoryDTO) {
         this.id = id;
         this.name = name;
-        this.minAge = minAge;
         this.price = price;
+        this.listCategoryDTO = listCategoryDTO;
     }
 
 }// class

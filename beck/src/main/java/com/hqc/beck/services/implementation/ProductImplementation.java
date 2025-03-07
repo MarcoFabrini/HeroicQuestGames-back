@@ -3,19 +3,18 @@ package com.hqc.beck.services.implementation;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hqc.beck.dto.ProductDTO;
+import com.hqc.beck.model.Authors;
+import com.hqc.beck.model.Categories;
 import com.hqc.beck.model.Editors;
 import com.hqc.beck.model.Product;
 import com.hqc.beck.repository.IAuthorsRepository;
 import com.hqc.beck.repository.ICategoriesRepository;
 import com.hqc.beck.repository.IEditorsRepository;
 import com.hqc.beck.repository.IProductRepository;
-import com.hqc.beck.repository.IReviewsRepository;
 import com.hqc.beck.request.ProductRequest;
 import com.hqc.beck.services.interfaces.IProductService;
 import static com.hqc.beck.utils.Utilities.buildProductDTO;
@@ -23,24 +22,18 @@ import static com.hqc.beck.utils.Utilities.buildProductDTOid;
 
 @Service
 public class ProductImplementation implements IProductService {
+    private final IProductRepository productRepository;
+    private final IEditorsRepository editorsRepository;
+    private final IAuthorsRepository authorsRepository;
+    private final ICategoriesRepository categoriesRepository;
 
-    @Autowired
-    IProductRepository productRepository;
-
-    @Autowired
-    IEditorsRepository editorsRepository;
-
-    @Autowired
-    IAuthorsRepository authorsRepository;
-
-    @Autowired
-    ICategoriesRepository categoriesRepository;
-
-    @Autowired
-    IReviewsRepository reviewsRepository;
-
-    @Autowired
-    Logger log;
+    public ProductImplementation(IProductRepository productRepository, IEditorsRepository editorsRepository,
+            IAuthorsRepository authorsRepository, ICategoriesRepository categoriesRepository) {
+        this.productRepository = productRepository;
+        this.editorsRepository = editorsRepository;
+        this.authorsRepository = authorsRepository;
+        this.categoriesRepository = categoriesRepository;
+    }
 
     @Override
     public List<ProductDTO> list() throws Exception {
@@ -56,8 +49,6 @@ public class ProductImplementation implements IProductService {
         return buildProductDTOid(product);
     }// geProductById
 
-    
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void create(ProductRequest req) throws Exception {
@@ -67,6 +58,14 @@ public class ProductImplementation implements IProductService {
         Optional<Editors> editor = editorsRepository.findById(req.getEditorsId());
         if (!editor.isPresent())
             throw new Exception("Editor-Not-Found");
+
+        List<Authors> authorsList = authorsRepository.findAllById(req.getAuthorsId());
+        if (authorsList.isEmpty())
+            throw new Exception("❌ Nessun autore trovato per gli ID: " + req.getAuthorsId());
+
+        List<Categories> categoryList = categoriesRepository.findAllById(req.getAuthorsId());
+        if (categoryList.isEmpty())
+            throw new Exception("❌ Nessuna categoria trovata per gli ID: " + req.getAuthorsId());
 
         Product g = new Product();
         g.setName(req.getName());
@@ -82,6 +81,8 @@ public class ProductImplementation implements IProductService {
         g.setActive(true);
 
         g.setEditor(editor.get());
+        g.setListAuthors(authorsList);
+        g.setListCategory(categoryList);
 
         productRepository.save(g);
     }// create
@@ -89,72 +90,45 @@ public class ProductImplementation implements IProductService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(ProductRequest req) throws Exception {
-        Optional<Product> product = productRepository.findById(req.getId());
-        if (!product.isPresent()) {
-            throw new Exception("game-isPresent");
-        }
+        Product product = productRepository.findById(req.getId())
+                .orElseThrow(() -> new Exception("Product-Not-Found"));
 
-        Optional<Editors> editor = editorsRepository.findById(req.getEditorsId());
+        Editors editor = editorsRepository.findById(req.getEditorsId())
+                .orElseThrow(() -> new Exception("Editor-Not-Found"));
 
-        Product p = product.get();
-        p.setName(req.getName());
-        p.setDescription(req.getDescription());
-        p.setPrice(req.getPrice());
-        p.setDate(req.getDate());
-        p.setMinGameTime(req.getMinGameTime());
-        p.setMaxGameTime(req.getMaxGameTime());
-        p.setMinPlayerNumber(req.getMinPlayerNumber());
-        p.setMaxPlayerNumber(req.getMaxPlayerNumber());
-        p.setMinAge(req.getMinAge());
-        p.setStockQuantity(req.getStockQuantity());
-        p.setEditor(editor.get());
-        p.setActive(req.getActive());
+        List<Authors> authorsList = authorsRepository.findAllById(req.getAuthorsId());
+        if (authorsList.isEmpty())
+            throw new Exception("❌ Nessun autore trovato per gli ID: " + req.getAuthorsId());
 
-        // if (req.getAuthorsId() != null) {
-        // Optional<Authors> a = authorsR.findById(req.getAuthorsId());
-        // if (a.isPresent()) {
-        // Authors author = a.get();
-        // g.getListAuthors().add(author);
-        // }
-        // }
+        List<Categories> categoryList = categoriesRepository.findAllById(req.getAuthorsId());
+        if (categoryList.isEmpty())
+            throw new Exception("❌ Nessuna categoria trovata per gli ID: " + req.getAuthorsId());
 
-        // if (req.getCategoryId() != null) {
-        // Optional<Categories> c = categoryR.findById(req.getCategoryId());
-        // if (c.isPresent()) {
-        // Categories category = c.get();
-        // g.getListCategory().add(category);
-        // }
-        // }
+        product.setName(req.getName());
+        product.setDescription(req.getDescription());
+        product.setPrice(req.getPrice());
+        product.setDate(req.getDate());
+        product.setMinGameTime(req.getMinGameTime());
+        product.setMaxGameTime(req.getMaxGameTime());
+        product.setMinPlayerNumber(req.getMinPlayerNumber());
+        product.setMaxPlayerNumber(req.getMaxPlayerNumber());
+        product.setMinAge(req.getMinAge());
+        product.setStockQuantity(req.getStockQuantity());
+        product.setActive(req.getActive());
 
-        // save
-        productRepository.save(p);
+        product.setEditor(editor);
+        product.setListAuthors(authorsList);
+        product.setListCategory(categoryList);
 
+        productRepository.save(product);
     }// update
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Integer id) throws Exception {
         Optional<Product> product = productRepository.findById(id);
-        if (!product.isPresent()) {
-            throw new Exception("game-noPresent");
-        }
-
-        // if (gameEntity.getListAuthors() != null) {
-        // gameEntity.getListAuthors().forEach(author ->
-        // author.getListGames().remove(game));
-        // gameEntity.getListAuthors().clear();
-        // }
-
-        // if (gameEntity.getListCategory() != null) {
-        // gameEntity.getListCategory().forEach(category ->
-        // category.getListGames().remove(gameEntity));
-        // gameEntity.getListCategory().clear();
-        // }
-
-        // if (gameEntity.getListReviews() != null) {
-        // gameEntity.getListReviews().forEach(review -> review.setGame(null));
-        // gameEntity.getListReviews().clear();
-        // }
+        if (!product.isPresent())
+            throw new Exception("Product-Not-Found");
 
         product.get().setActive(false);
 

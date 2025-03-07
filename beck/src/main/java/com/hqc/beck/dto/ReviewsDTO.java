@@ -25,4 +25,12 @@ public class ReviewsDTO {
     private OrdersDTO orderDTO;
     private Boolean active;
 
+    public ReviewsDTO(Integer id, Integer score, String description, Date createdAt, Boolean active) {
+        this.id = id;
+        this.score = score;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.active = active;
+    }
+
 }// class
