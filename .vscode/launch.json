@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BeckApplication<beck>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.hqc.beck.BeckApplication",
+            "projectName": "beck",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
