@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +28,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "product")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,25 +38,10 @@ public class Product {
     private String name;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Column(name = "pubblication_date")
+    @Column(name = "pubblication_date", nullable = true)
     private Date date;
 
-    @Column(name = "min_game_time")
-    private Integer minGameTime;
-
-    @Column(name = "max_game_time")
-    private Integer maxGameTime;
-
-    @Column(name = "min_player_number")
-    private Integer minPlayerNumber;
-
-    @Column(name = "max_player_number")
-    private Integer maxPlayerNumber;
-
-    @Column(name = "min_age")
-    private Integer minAge;
-
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT", nullable = true)
     private String description;
 
     @Column(name = "stock_quantity", nullable = false)
@@ -64,6 +52,22 @@ public class Product {
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_board_game", referencedColumnName = "id", nullable = true)
+    private BoardGame boardGame;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_console", referencedColumnName = "id", nullable = true)
+    private Console console;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_collectible_card", referencedColumnName = "id", nullable = true)
+    private CollectibleCard collectibleCard;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_accessory", referencedColumnName = "id", nullable = true)
+    private Accessory accessory;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "authors_product", joinColumns = @JoinColumn(name = "id_product"), inverseJoinColumns = @JoinColumn(name = "id_authors"))

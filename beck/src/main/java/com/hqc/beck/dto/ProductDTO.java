@@ -21,19 +21,20 @@ public class ProductDTO {
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date date;
-    private Integer minGameTime;
-    private Integer maxGameTime;
-    private Integer minPlayerNumber;
-    private Integer maxPlayerNumber;
-    private Integer minAge;
     private String description;
     private Integer stockQuantity;
     private Double price;
     private Boolean active;
+
     private EditorsDTO editorDTO;
     private List<AuthorsDTO> listAuthorsDTO;
     private List<CategoriesDTO> listCategoryDTO;
     private List<ReviewsDTO> listReviewsDTO;
+
+    private BoardGameDTO boardGameDTO;
+    private ConsoleDTO consoleDTO;
+    private CollectibleCardDTO collectibleCardDTO;
+    private AccessoryDTO accessoryDTO;
 
     public ProductDTO(Integer id, String name, Double price, List<CategoriesDTO> listCategoryDTO) {
         this.id = id;

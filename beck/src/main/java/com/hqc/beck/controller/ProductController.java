@@ -9,14 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hqc.beck.dto.ProductDTO;
-import com.hqc.beck.request.ProductRequest;
 import com.hqc.beck.services.interfaces.IProductService;
 
 @RequestMapping("/api")
@@ -52,31 +48,31 @@ public class ProductController {
         }
     }// getProductById
 
-    @PostMapping("admin/product/create")
-    public ResponseEntity<?> create(@RequestBody ProductRequest req) {
-        try {
-            productService.create(req);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Collections.singletonMap("message", "Game successfully CREATED!"));
-        } catch (Exception e) {
-            log.error("Error during the creation of the game: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("error", "Internal server error"));
-        }
-    }// create
+    // @PostMapping("admin/product/create")
+    // public ResponseEntity<?> create(@RequestBody ProductRequest req) {
+    //     try {
+    //         productService.create(req);
+    //         return ResponseEntity.status(HttpStatus.CREATED)
+    //                 .body(Collections.singletonMap("message", "Game successfully CREATED!"));
+    //     } catch (Exception e) {
+    //         log.error("Error during the creation of the game: " + e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body(Collections.singletonMap("error", "Internal server error"));
+    //     }
+    // }// create
 
-    @PutMapping("admin/product/update")
-    public ResponseEntity<?> update(@RequestBody ProductRequest req) {
-        try {
-            productService.update(req);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(Collections.singletonMap("message", "Product successfully UPDATED!"));
-        } catch (Exception e) {
-            log.error("Error during the update of the product: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("error", "Internal server error"));
-        }
-    }// update
+    // @PutMapping("admin/product/update")
+    // public ResponseEntity<?> update(@RequestBody ProductRequest req) {
+    //     try {
+    //         productService.update(req);
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //                 .body(Collections.singletonMap("message", "Product successfully UPDATED!"));
+    //     } catch (Exception e) {
+    //         log.error("Error during the update of the product: " + e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body(Collections.singletonMap("error", "Internal server error"));
+    //     }
+    // }// update
 
     @DeleteMapping("admin/product/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {

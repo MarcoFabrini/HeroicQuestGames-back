@@ -8,9 +8,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import com.hqc.beck.dto.AccessoryDTO;
 import com.hqc.beck.dto.AuthorsDTO;
+import com.hqc.beck.dto.BoardGameDTO;
 import com.hqc.beck.dto.CartsDTO;
 import com.hqc.beck.dto.CategoriesDTO;
+import com.hqc.beck.dto.CollectibleCardDTO;
+import com.hqc.beck.dto.ConsoleDTO;
 import com.hqc.beck.dto.DetailsCartDTO;
 import com.hqc.beck.dto.DetailsOrderDTO;
 import com.hqc.beck.dto.DetailsShippingDTO;
@@ -20,9 +24,13 @@ import com.hqc.beck.dto.PayCardsDTO;
 import com.hqc.beck.dto.ProductDTO;
 import com.hqc.beck.dto.ReviewsDTO;
 import com.hqc.beck.dto.UsersDTO;
+import com.hqc.beck.model.Accessory;
 import com.hqc.beck.model.Authors;
+import com.hqc.beck.model.BoardGame;
 import com.hqc.beck.model.Carts;
 import com.hqc.beck.model.Categories;
+import com.hqc.beck.model.CollectibleCard;
+import com.hqc.beck.model.Console;
 import com.hqc.beck.model.DetailsCart;
 import com.hqc.beck.model.DetailsOrder;
 import com.hqc.beck.model.DetailsShipping;
@@ -161,11 +169,6 @@ public class Utilities {
         p.getId(),
         p.getName(),
         p.getDate(),
-        p.getMinGameTime(),
-        p.getMaxGameTime(),
-        p.getMinPlayerNumber(),
-        p.getMaxPlayerNumber(),
-        p.getMinAge(),
         p.getDescription(),
         p.getStockQuantity(),
         p.getPrice(),
@@ -173,7 +176,12 @@ public class Utilities {
         buildEditorsDTO(p.getEditor()),
         buildAuthorsDTO(p.getListAuthors()),
         buildCategoriesDTO(p.getListCategory()),
-        buildReviewsDTO(p.getListReviews()));
+        buildReviewsDTO(p.getListReviews()),
+        buildBoardGameDTO(p.getBoardGame()),
+        buildConsoleDTO(p.getConsole()),
+        buildCollectibleCardDTO(p.getCollectibleCard()),
+        buildAccessoryDTO(p.getAccessory())
+    );
   }// buildProductDTO
 
   public static List<ProductDTO> buildProductDTO(List<Product> pr) {
@@ -185,6 +193,48 @@ public class Utilities {
             buildCategoriesDTO(p.getListCategory())))
         .collect(Collectors.toList());
   }// List buildProductDTO
+
+  public static BoardGameDTO buildBoardGameDTO(BoardGame b) {
+    return new BoardGameDTO(
+        b.getMinGameTime(),
+        b.getMaxGameTime(),
+        b.getMinPlayerNumber(),
+        b.getMaxPlayerNumber(),
+        b.getMinAge());
+  }// buildBoardGameDTO
+
+  public static ConsoleDTO buildConsoleDTO(Console c) {
+    return new ConsoleDTO(
+        c.getBrand(),
+        c.getModel(),
+        c.getStorageCapacity(),
+        c.getCondition(),
+        c.getWarrantyMonths(),
+        c.getIncludedAccessories());
+  }// buildConsoleDTO
+
+  public static CollectibleCardDTO buildCollectibleCardDTO(CollectibleCard c) {
+    return new CollectibleCardDTO(
+        c.getCardSet(),
+        c.getRarity(),
+        c.getEdition(),
+        c.getLanguage(),
+        c.getCondition(),
+        c.getHolographic(),
+        c.getGraded(),
+        c.getGradeAuthority(),
+        c.getGradeScore());
+  }// buildCollectibleCardDTO
+
+  public static AccessoryDTO buildAccessoryDTO(Accessory a) {
+    return new AccessoryDTO(
+        a.getCompatibleWith(),
+        a.getColor(),
+        a.getWireless(),
+        a.getBatteryLife(),
+        a.getExtraFeatures(),
+        a.getOriginalOrThirdparty());
+  }// builAccessoryDTO
 
   // builder per farsi restituire un OrdersDTO
   public final static OrdersDTO buildOrdersDTO(Orders o) {

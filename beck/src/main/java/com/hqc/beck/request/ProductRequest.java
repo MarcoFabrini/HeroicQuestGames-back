@@ -21,17 +21,18 @@ public class ProductRequest {
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date date;
-    private Integer minGameTime;
-    private Integer maxGameTime;
-    private Integer minPlayerNumber;
-    private Integer maxPlayerNumber;
-    private Integer minAge;
     private String description;
     private Integer stockQuantity;
     private Double price;
     private Boolean active;
+
     private Integer editorsId;
     private List<Integer> authorsId;
     private List<Integer> categoryId;
+
+    private Integer boardGameId;
+    private Integer consoleId;
+    private Integer collectibleCardId;
+    private Integer accessoryId;
 
 }// class
