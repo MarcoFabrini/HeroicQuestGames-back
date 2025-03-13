@@ -4,40 +4,40 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hqc.beck.model.BoardGame;
+import com.hqc.beck.model.CollectibleCard;
 import com.hqc.beck.model.Product;
 import com.hqc.beck.repository.IAuthorsRepository;
-import com.hqc.beck.repository.IBoardGameRepository;
 import com.hqc.beck.repository.ICategoriesRepository;
+import com.hqc.beck.repository.ICollectibleCardRepository;
 import com.hqc.beck.repository.IEditorsRepository;
 import com.hqc.beck.repository.IProductRepository;
-import com.hqc.beck.request.BoardGameRequest;
-import com.hqc.beck.services.interfaces.IBoardGameService;
+import com.hqc.beck.request.CollectibleCardRequest;
+import com.hqc.beck.services.interfaces.ICollectibleCardService;
 
 @Service
-public class BoardGameImplementation implements IBoardGameService {
+public class CollectibleCardImplementation implements ICollectibleCardService {
 
-    private final Logger log;
     private final IProductRepository productRepository;
-    private final IBoardGameRepository boardGameRepository;
+    private final ICollectibleCardRepository collectibleCardRepository;
     private final IEditorsRepository editorsRepository;
     private final IAuthorsRepository authorsRepository;
     private final ICategoriesRepository categoriesRepository;
+    private final Logger log;
 
-    public BoardGameImplementation(Logger log, IProductRepository productRepository,
-            IBoardGameRepository boardGameRepository, IEditorsRepository editorsRepository,
-            IAuthorsRepository authorsRepository, ICategoriesRepository categoriesRepository) {
-        this.log = log;
+    public CollectibleCardImplementation(IProductRepository productRepository,
+            ICollectibleCardRepository collectibleCardRepository, IEditorsRepository editorsRepository,
+            IAuthorsRepository authorsRepository, ICategoriesRepository categoriesRepository, Logger log) {
         this.productRepository = productRepository;
-        this.boardGameRepository = boardGameRepository;
+        this.collectibleCardRepository = collectibleCardRepository;
         this.editorsRepository = editorsRepository;
         this.authorsRepository = authorsRepository;
         this.categoriesRepository = categoriesRepository;
+        this.log = log;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void create(BoardGameRequest req) throws Exception {
+    public void create(CollectibleCardRequest req) throws Exception {
         if (req == null)
             throw new Exception("Request cannot be null");
 
@@ -50,14 +50,18 @@ public class BoardGameImplementation implements IBoardGameService {
         if (req.getStockQuantity() == null || req.getStockQuantity() < 0)
             throw new Exception("Stock quantity cannot be negative");
 
-        BoardGame boardGame = new BoardGame();
-        boardGame.setMinGameTime(req.getMinGameTime());
-        boardGame.setMaxGameTime(req.getMaxGameTime());
-        boardGame.setMinPlayerNumber(req.getMinPlayerNumber());
-        boardGame.setMaxPlayerNumber(req.getMaxPlayerNumber());
-        boardGame.setMinAge(req.getMinAge());
+        CollectibleCard collectibleCard = new CollectibleCard();
+        collectibleCard.setCardSet(req.getCardSet());
+        collectibleCard.setRarity(req.getRarity());
+        collectibleCard.setEdition(req.getEdition());
+        collectibleCard.setLanguage(req.getLanguage());
+        collectibleCard.setCondition(req.getCondition());
+        collectibleCard.setHolographic(req.getHolographic());
+        collectibleCard.setGraded(req.getGraded());
+        collectibleCard.setGradeAuthority(req.getGradeAuthority());
+        collectibleCard.setGradeScore(req.getGradeScore());
 
-        boardGame = boardGameRepository.save(boardGame);
+        collectibleCard = collectibleCardRepository.save(collectibleCard);
 
         Product product = new Product();
         product.setName(req.getName());
@@ -67,7 +71,7 @@ public class BoardGameImplementation implements IBoardGameService {
         product.setPrice(req.getPrice());
         product.setActive(true);
 
-        product.setBoardGame(boardGame);
+        product.setCollectibleCard(collectibleCard);
 
         if (req.getEditorsId() != null)
             product.setEditor(editorsRepository.findById(req.getEditorsId()).orElse(null));
@@ -79,34 +83,38 @@ public class BoardGameImplementation implements IBoardGameService {
             product.setListCategory(categoriesRepository.findAllById(req.getCategoryId()));
 
         productRepository.save(product);
-        log.debug("Product and Board Game successfully created!");
+        log.debug("Product and Collectible Card successfully created!");
     }// create
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(BoardGameRequest req) throws Exception {
+    public void update(CollectibleCardRequest req) throws Exception {
         if (req == null)
             throw new Exception("Request cannot be null");
 
-        if (req.getBoardGameId() == null)
-            throw new Exception("Accessory ID cannot be null");
+        if (req.getCollectibleCardId() == null)
+            throw new Exception("Collectible Card ID cannot be null");
 
         if (req.getProductId() == null)
             throw new Exception("Product ID cannot be null");
 
-        BoardGame boardGame = boardGameRepository.findById(req.getBoardGameId())
-                .orElseThrow(() -> new Exception("Accessory not found with ID: " + req.getBoardGameId()));
+        CollectibleCard collectibleCard = collectibleCardRepository.findById(req.getCollectibleCardId())
+                .orElseThrow(() -> new Exception("Collectible Card not found with ID: " + req.getCollectibleCardId()));
 
         Product product = productRepository.findById(req.getProductId())
                 .orElseThrow(() -> new Exception("Product not found with ID: " + req.getProductId()));
 
-        boardGame.setMinGameTime(req.getMinGameTime());
-        boardGame.setMaxGameTime(req.getMaxGameTime());
-        boardGame.setMinPlayerNumber(req.getMinPlayerNumber());
-        boardGame.setMaxPlayerNumber(req.getMaxPlayerNumber());
-        boardGame.setMinAge(req.getMinAge());
+        collectibleCard.setCardSet(req.getCardSet());
+        collectibleCard.setRarity(req.getRarity());
+        collectibleCard.setEdition(req.getEdition());
+        collectibleCard.setLanguage(req.getLanguage());
+        collectibleCard.setCondition(req.getCondition());
+        collectibleCard.setHolographic(req.getHolographic());
+        collectibleCard.setGraded(req.getGraded());
+        collectibleCard.setGradeAuthority(req.getGradeAuthority());
+        collectibleCard.setGradeScore(req.getGradeScore());
 
-        boardGame = boardGameRepository.save(boardGame);
+        collectibleCard = collectibleCardRepository.save(collectibleCard);
 
         product.setName(req.getName());
         product.setDate(req.getDate());
@@ -124,11 +132,11 @@ public class BoardGameImplementation implements IBoardGameService {
         if (req.getCategoryId() != null && !req.getCategoryId().isEmpty())
             product.setListCategory(categoriesRepository.findAllById(req.getCategoryId()));
 
-        product.setBoardGame(boardGame);
+        product.setCollectibleCard(collectibleCard);
 
         productRepository.save(product);
 
-        log.debug("Board Game and Product successfully updated!");
+        log.debug("Collectible Card and Product successfully updated!");
     }// update
 
 }// class

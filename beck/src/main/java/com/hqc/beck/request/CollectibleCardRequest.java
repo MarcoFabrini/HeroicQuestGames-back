@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CollectibleCardRequest extends ProductRequest {
+    private Integer collectibleCardId;
     private String cardSet;
     private String rarity;
     private String edition;

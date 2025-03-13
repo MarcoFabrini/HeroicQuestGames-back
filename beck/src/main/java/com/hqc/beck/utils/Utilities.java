@@ -214,6 +214,7 @@ public class Utilities {
 
   public static CollectibleCardDTO buildCollectibleCardDTO(CollectibleCard c) {
     return new CollectibleCardDTO(
+        c.getId(),
         c.getCardSet(),
         c.getRarity(),
         c.getEdition(),
