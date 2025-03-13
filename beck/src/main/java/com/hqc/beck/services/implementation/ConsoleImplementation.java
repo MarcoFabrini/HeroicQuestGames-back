@@ -2,33 +2,32 @@ package com.hqc.beck.services.implementation;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.hqc.beck.model.CollectibleCard;
+import com.hqc.beck.model.Console;
 import com.hqc.beck.model.Product;
 import com.hqc.beck.repository.IAuthorsRepository;
 import com.hqc.beck.repository.ICategoriesRepository;
-import com.hqc.beck.repository.ICollectibleCardRepository;
+import com.hqc.beck.repository.IConsoleRepository;
 import com.hqc.beck.repository.IEditorsRepository;
 import com.hqc.beck.repository.IProductRepository;
-import com.hqc.beck.request.CollectibleCardRequest;
-import com.hqc.beck.services.interfaces.ICollectibleCardService;
+import com.hqc.beck.request.ConsoleRequest;
+import com.hqc.beck.services.interfaces.IConsoleService;
 
 @Service
-public class CollectibleCardImplementation implements ICollectibleCardService {
+public class ConsoleImplementation implements IConsoleService {
 
     private final IProductRepository productRepository;
-    private final ICollectibleCardRepository collectibleCardRepository;
+    private final IConsoleRepository consoleRepository;
     private final IEditorsRepository editorsRepository;
     private final IAuthorsRepository authorsRepository;
     private final ICategoriesRepository categoriesRepository;
     private final Logger log;
 
-    public CollectibleCardImplementation(IProductRepository productRepository,
-            ICollectibleCardRepository collectibleCardRepository, IEditorsRepository editorsRepository,
-            IAuthorsRepository authorsRepository, ICategoriesRepository categoriesRepository, Logger log) {
+    public ConsoleImplementation(IProductRepository productRepository, IConsoleRepository consoleRepository,
+            IEditorsRepository editorsRepository, IAuthorsRepository authorsRepository,
+            ICategoriesRepository categoriesRepository, Logger log) {
         this.productRepository = productRepository;
-        this.collectibleCardRepository = collectibleCardRepository;
+        this.consoleRepository = consoleRepository;
         this.editorsRepository = editorsRepository;
         this.authorsRepository = authorsRepository;
         this.categoriesRepository = categoriesRepository;
@@ -36,8 +35,7 @@ public class CollectibleCardImplementation implements ICollectibleCardService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void create(CollectibleCardRequest req) throws Exception {
+    public void create(ConsoleRequest req) throws Exception {
         if (req == null)
             throw new Exception("Request cannot be null");
 
@@ -50,18 +48,15 @@ public class CollectibleCardImplementation implements ICollectibleCardService {
         if (req.getStockQuantity() == null || req.getStockQuantity() < 0)
             throw new Exception("Stock quantity cannot be negative");
 
-        CollectibleCard collectibleCard = new CollectibleCard();
-        collectibleCard.setCardSet(req.getCardSet());
-        collectibleCard.setRarity(req.getRarity());
-        collectibleCard.setEdition(req.getEdition());
-        collectibleCard.setLanguage(req.getLanguage());
-        collectibleCard.setCondition(req.getCondition());
-        collectibleCard.setHolographic(req.getHolographic());
-        collectibleCard.setGraded(req.getGraded());
-        collectibleCard.setGradeAuthority(req.getGradeAuthority());
-        collectibleCard.setGradeScore(req.getGradeScore());
+        Console console = new Console();
+        console.setBrand(req.getBrand());
+        console.setModel(req.getModel());
+        console.setStorageCapacity(req.getStorageCapacity());
+        console.setCondition(req.getCondition());
+        console.setWarrantyMonths(req.getWarrantyMonths());
+        console.setIncludedAccessories(req.getIncludedAccessories());
 
-        collectibleCard = collectibleCardRepository.save(collectibleCard);
+        console = consoleRepository.save(console);
 
         Product product = new Product();
         product.setName(req.getName());
@@ -71,7 +66,7 @@ public class CollectibleCardImplementation implements ICollectibleCardService {
         product.setPrice(req.getPrice());
         product.setActive(true);
 
-        product.setCollectibleCard(collectibleCard);
+        product.setConsole(console);
 
         if (req.getEditorsId() != null)
             product.setEditor(editorsRepository.findById(req.getEditorsId()).orElse(null));
@@ -83,38 +78,34 @@ public class CollectibleCardImplementation implements ICollectibleCardService {
             product.setListCategory(categoriesRepository.findAllById(req.getCategoryId()));
 
         productRepository.save(product);
-        log.debug("Product and Collectible Card successfully created!");
+        log.debug("Product and Console successfully created!");
     }// create
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void update(CollectibleCardRequest req) throws Exception {
+    public void update(ConsoleRequest req) throws Exception {
         if (req == null)
             throw new Exception("Request cannot be null");
 
-        if (req.getCollectibleCardId() == null)
-            throw new Exception("Collectible Card ID cannot be null");
+        if (req.getConsoleId() == null)
+            throw new Exception("Console ID cannot be null");
 
         if (req.getProductId() == null)
             throw new Exception("Product ID cannot be null");
 
-        CollectibleCard collectibleCard = collectibleCardRepository.findById(req.getCollectibleCardId())
-                .orElseThrow(() -> new Exception("Collectible Card not found with ID: " + req.getCollectibleCardId()));
+        Console console = consoleRepository.findById(req.getConsoleId())
+                .orElseThrow(() -> new Exception("Accessory not found with ID: " + req.getConsoleId()));
 
         Product product = productRepository.findById(req.getProductId())
                 .orElseThrow(() -> new Exception("Product not found with ID: " + req.getProductId()));
 
-        collectibleCard.setCardSet(req.getCardSet());
-        collectibleCard.setRarity(req.getRarity());
-        collectibleCard.setEdition(req.getEdition());
-        collectibleCard.setLanguage(req.getLanguage());
-        collectibleCard.setCondition(req.getCondition());
-        collectibleCard.setHolographic(req.getHolographic());
-        collectibleCard.setGraded(req.getGraded());
-        collectibleCard.setGradeAuthority(req.getGradeAuthority());
-        collectibleCard.setGradeScore(req.getGradeScore());
+        console.setBrand(req.getBrand());
+        console.setModel(req.getModel());
+        console.setStorageCapacity(req.getStorageCapacity());
+        console.setCondition(req.getCondition());
+        console.setWarrantyMonths(req.getWarrantyMonths());
+        console.setIncludedAccessories(req.getIncludedAccessories());
 
-        collectibleCardRepository.save(collectibleCard);
+        consoleRepository.save(console);
 
         product.setName(req.getName());
         product.setDate(req.getDate());
@@ -132,11 +123,11 @@ public class CollectibleCardImplementation implements ICollectibleCardService {
         if (req.getCategoryId() != null && !req.getCategoryId().isEmpty())
             product.setListCategory(categoriesRepository.findAllById(req.getCategoryId()));
 
-        product.setCollectibleCard(collectibleCard);
+        product.setConsole(console);
 
         productRepository.save(product);
 
-        log.debug("Collectible Card and Product successfully updated!");
+        log.debug("Console and Product successfully updated!");
     }// update
 
 }// class

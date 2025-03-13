@@ -204,6 +204,7 @@ public class Utilities {
 
   public static ConsoleDTO buildConsoleDTO(Console c) {
     return new ConsoleDTO(
+        c.getId(),
         c.getBrand(),
         c.getModel(),
         c.getStorageCapacity(),
