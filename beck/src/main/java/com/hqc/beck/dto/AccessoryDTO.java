@@ -13,10 +13,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccessoryDTO {
+    private Integer accessoryId;
     private String compatibleWith;
     private String color;
     private Boolean wireless;
     private Integer batteryLife;
     private String extraFeatures;
     private String originalOrThirdParty;
-}// class 
+
+}// class

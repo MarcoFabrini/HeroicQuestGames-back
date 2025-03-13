@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductDTO {
-    private Integer id;
+    private Integer productId;
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date date;
@@ -36,11 +36,10 @@ public class ProductDTO {
     private CollectibleCardDTO collectibleCardDTO;
     private AccessoryDTO accessoryDTO;
 
-    public ProductDTO(Integer id, String name, Double price, List<CategoriesDTO> listCategoryDTO) {
-        this.id = id;
+    public ProductDTO(Integer productId, String name, Double price) {
+        this.productId = productId;
         this.name = name;
         this.price = price;
-        this.listCategoryDTO = listCategoryDTO;
     }
 
 }// class

@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BoardGameRequest extends ProductRequest {
+    private Integer boardGameId;
     private Integer minGameTime;
     private Integer maxGameTime;
     private Integer minPlayerNumber;

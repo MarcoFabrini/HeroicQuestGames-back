@@ -10,41 +10,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hqc.beck.request.AccessoryRequest;
-import com.hqc.beck.services.interfaces.IAccessoryService;
+import com.hqc.beck.request.BoardGameRequest;
+import com.hqc.beck.services.interfaces.IBoardGameService;
 
 @RequestMapping("/api")
 @RestController
-public class AccessoryController {
+public class BoardGameController {
 
-    private final IAccessoryService accessoryService;
+    private final IBoardGameService boardGameService;
 
-    public AccessoryController(IAccessoryService accessoryService) {
-        this.accessoryService = accessoryService;
+    public BoardGameController(IBoardGameService boardGameService) {
+        this.boardGameService = boardGameService;
     }
 
-    @PostMapping("/admin/accessory/create")
-    public ResponseEntity<?> create(@RequestBody AccessoryRequest req) {
+    @PostMapping("/admin/boardgame/create")
+    public ResponseEntity<?> create(@RequestBody BoardGameRequest req) {
         try {
-            accessoryService.create(req);
+            boardGameService.create(req);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Collections.singletonMap("message", "Accessory successfully CREATED!"));
+                    .body(Collections.singletonMap("message", "Board Game successfully CREATED!"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("error", "Internal server error"));
         }
     }// create
 
-    @PutMapping("/admin/accessory/update")
-    public ResponseEntity<?> update(@RequestBody AccessoryRequest req) {
+     @PutMapping("/admin/boardgame/update")
+    public ResponseEntity<?> update(@RequestBody BoardGameRequest req) {
         try {
-            accessoryService.update(req);
+            boardGameService.update(req);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(Collections.singletonMap("message", "Accessory successfully UPDATED!"));
+                    .body(Collections.singletonMap("message", "Board Game successfully UPDATED!"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("error", "Internal server error: " + e.getMessage()));
         }
     }// update
-
+    
 }// class

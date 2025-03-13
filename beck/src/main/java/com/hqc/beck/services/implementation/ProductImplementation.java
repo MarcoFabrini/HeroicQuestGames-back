@@ -27,15 +27,11 @@ public class ProductImplementation implements IProductService {
         return buildProductDTO(listProduct);
     }// list
 
-    /*
-     * Ogni nuova classe deve avere il sui buildDTO e il list specifico di quella categoria
-     * di prodotto, rimuovere da qui 
-     */
     @Override
     public ProductDTO getProductById(Integer id) throws Exception {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new Exception("Product not found with ID: " + id));
-    
+
         return buildProductDTOid(product);
     }// geProductById
 
@@ -50,89 +46,6 @@ public class ProductImplementation implements IProductService {
 
         productRepository.save(product.get());
     }// delete
-
-    // @Override
-    // @Transactional(rollbackFor = Exception.class)
-    // public void create(ProductRequest req) throws Exception {
-    // if (productRepository.findByNameAndIdNot(req.getName(),
-    // req.getId()).isPresent())
-    // throw new Exception("Product-Already-Present");
-
-    // Optional<Editors> editor = editorsRepository.findById(req.getEditorsId());
-    // if (!editor.isPresent())
-    // throw new Exception("Editor-Not-Found");
-
-    // List<Authors> authorsList =
-    // authorsRepository.findAllById(req.getAuthorsId());
-    // if (authorsList.isEmpty())
-    // throw new Exception("❌ Nessun autore trovato per gli ID: " +
-    // req.getAuthorsId());
-
-    // List<Categories> categoryList =
-    // categoriesRepository.findAllById(req.getAuthorsId());
-    // if (categoryList.isEmpty())
-    // throw new Exception("❌ Nessuna categoria trovata per gli ID: " +
-    // req.getAuthorsId());
-
-    // Product g = new Product();
-    // g.setName(req.getName());
-    // g.setDescription(req.getDescription());
-    // g.setPrice(req.getPrice());
-    // g.setDate(req.getDate());
-    // g.setMinGameTime(req.getMinGameTime());
-    // g.setMaxGameTime(req.getMaxGameTime());
-    // g.setMinPlayerNumber(req.getMinPlayerNumber());
-    // g.setMaxPlayerNumber(req.getMaxPlayerNumber());
-    // g.setMinAge(req.getMinAge());
-    // g.setStockQuantity(req.getStockQuantity());
-    // g.setActive(true);
-
-    // g.setEditor(editor.get());
-    // g.setListAuthors(authorsList);
-    // g.setListCategory(categoryList);
-
-    // productRepository.save(g);
-    // }// create
-
-    // @Override
-    // @Transactional(rollbackFor = Exception.class)
-    // public void update(ProductRequest req) throws Exception {
-    // Product product = productRepository.findById(req.getId())
-    // .orElseThrow(() -> new Exception("Product-Not-Found"));
-
-    // Editors editor = editorsRepository.findById(req.getEditorsId())
-    // .orElseThrow(() -> new Exception("Editor-Not-Found"));
-
-    // List<Authors> authorsList =
-    // authorsRepository.findAllById(req.getAuthorsId());
-    // if (authorsList.isEmpty())
-    // throw new Exception("❌ Nessun autore trovato per gli ID: " +
-    // req.getAuthorsId());
-
-    // List<Categories> categoryList =
-    // categoriesRepository.findAllById(req.getAuthorsId());
-    // if (categoryList.isEmpty())
-    // throw new Exception("❌ Nessuna categoria trovata per gli ID: " +
-    // req.getAuthorsId());
-
-    // product.setName(req.getName());
-    // product.setDescription(req.getDescription());
-    // product.setPrice(req.getPrice());
-    // product.setDate(req.getDate());
-    // product.setMinGameTime(req.getMinGameTime());
-    // product.setMaxGameTime(req.getMaxGameTime());
-    // product.setMinPlayerNumber(req.getMinPlayerNumber());
-    // product.setMaxPlayerNumber(req.getMaxPlayerNumber());
-    // product.setMinAge(req.getMinAge());
-    // product.setStockQuantity(req.getStockQuantity());
-    // product.setActive(req.getActive());
-
-    // product.setEditor(editor);
-    // product.setListAuthors(authorsList);
-    // product.setListCategory(categoryList);
-
-    // productRepository.save(product);
-    // }// update
 
     // @Override
     // public List<GamesDTO> searchByTyping(String name, Integer authorsId, Integer

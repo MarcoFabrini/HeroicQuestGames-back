@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductRequest {
-    private Integer id;
+    private Integer productId;
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date date;
@@ -29,10 +29,4 @@ public class ProductRequest {
     private Integer editorsId;
     private List<Integer> authorsId;
     private List<Integer> categoryId;
-
-    private Integer boardGameId;
-    private Integer consoleId;
-    private Integer collectibleCardId;
-    private Integer accessoryId;
-
 }// class

@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccessoryRequest extends ProductRequest {
+    private Integer accessoryId;
     private String compatibleWith;
     private String color;
     private Boolean wireless;

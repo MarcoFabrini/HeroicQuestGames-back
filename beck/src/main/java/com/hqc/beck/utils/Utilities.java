@@ -173,15 +173,14 @@ public class Utilities {
         p.getStockQuantity(),
         p.getPrice(),
         p.getActive(),
-        buildEditorsDTO(p.getEditor()),
-        buildAuthorsDTO(p.getListAuthors()),
-        buildCategoriesDTO(p.getListCategory()),
-        buildReviewsDTO(p.getListReviews()),
-        buildBoardGameDTO(p.getBoardGame()),
-        buildConsoleDTO(p.getConsole()),
-        buildCollectibleCardDTO(p.getCollectibleCard()),
-        buildAccessoryDTO(p.getAccessory())
-    );
+        p.getEditor() != null ? buildEditorsDTO(p.getEditor()) : null,
+        p.getListAuthors() != null ? buildAuthorsDTO(p.getListAuthors()) : null,
+        p.getListCategory() != null ? buildCategoriesDTO(p.getListCategory()) : null,
+        p.getListReviews() != null ? buildReviewsDTO(p.getListReviews()) : null,
+        p.getBoardGame() != null ? buildBoardGameDTO(p.getBoardGame()) : null,
+        p.getConsole() != null ? buildConsoleDTO(p.getConsole()) : null,
+        p.getCollectibleCard() != null ? buildCollectibleCardDTO(p.getCollectibleCard()) : null,
+        p.getAccessory() != null ? buildAccessoryDTO(p.getAccessory()) : null);
   }// buildProductDTO
 
   public static List<ProductDTO> buildProductDTO(List<Product> pr) {
@@ -189,13 +188,13 @@ public class Utilities {
         .map(p -> new ProductDTO(
             p.getId(),
             p.getName(),
-            p.getPrice(),
-            buildCategoriesDTO(p.getListCategory())))
+            p.getPrice()))
         .collect(Collectors.toList());
   }// List buildProductDTO
 
   public static BoardGameDTO buildBoardGameDTO(BoardGame b) {
     return new BoardGameDTO(
+        b.getId(),
         b.getMinGameTime(),
         b.getMaxGameTime(),
         b.getMinPlayerNumber(),
@@ -228,6 +227,7 @@ public class Utilities {
 
   public static AccessoryDTO buildAccessoryDTO(Accessory a) {
     return new AccessoryDTO(
+        a.getId(),
         a.getCompatibleWith(),
         a.getColor(),
         a.getWireless(),

@@ -4,40 +4,40 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hqc.beck.model.Accessory;
+import com.hqc.beck.model.BoardGame;
 import com.hqc.beck.model.Product;
-import com.hqc.beck.repository.IAccessoryRepository;
 import com.hqc.beck.repository.IAuthorsRepository;
+import com.hqc.beck.repository.IBoardGameRepository;
 import com.hqc.beck.repository.ICategoriesRepository;
 import com.hqc.beck.repository.IEditorsRepository;
 import com.hqc.beck.repository.IProductRepository;
-import com.hqc.beck.request.AccessoryRequest;
-import com.hqc.beck.services.interfaces.IAccessoryService;
+import com.hqc.beck.request.BoardGameRequest;
+import com.hqc.beck.services.interfaces.IBoardGameService;
 
 @Service
-public class AccessoryImplementation implements IAccessoryService {
+public class BoardGameImplementation implements IBoardGameService {
 
+    private final Logger log;
     private final IProductRepository productRepository;
-    private final IAccessoryRepository accessoryRepository;
+    private final IBoardGameRepository boardGameRepository;
     private final IEditorsRepository editorsRepository;
     private final IAuthorsRepository authorsRepository;
     private final ICategoriesRepository categoriesRepository;
-    private final Logger log;
 
-    public AccessoryImplementation(IProductRepository productRepository, IAccessoryRepository accessoryRepository,
-            IEditorsRepository editorsRepository, IAuthorsRepository authorsRepository,
-            ICategoriesRepository categoriesRepository, Logger log) {
+    public BoardGameImplementation(Logger log, IProductRepository productRepository,
+            IBoardGameRepository boardGameRepository, IEditorsRepository editorsRepository,
+            IAuthorsRepository authorsRepository, ICategoriesRepository categoriesRepository) {
+        this.log = log;
         this.productRepository = productRepository;
-        this.accessoryRepository = accessoryRepository;
+        this.boardGameRepository = boardGameRepository;
         this.editorsRepository = editorsRepository;
         this.authorsRepository = authorsRepository;
         this.categoriesRepository = categoriesRepository;
-        this.log = log;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void create(AccessoryRequest req) throws Exception {
+    public void create(BoardGameRequest req) throws Exception {
         if (req == null)
             throw new Exception("Request cannot be null");
 
@@ -50,15 +50,14 @@ public class AccessoryImplementation implements IAccessoryService {
         if (req.getStockQuantity() == null || req.getStockQuantity() < 0)
             throw new Exception("Stock quantity cannot be negative");
 
-        Accessory accessory = new Accessory();
-        accessory.setCompatibleWith(req.getCompatibleWith());
-        accessory.setColor(req.getColor());
-        accessory.setWireless(req.getWireless());
-        accessory.setBatteryLife(req.getBatteryLife());
-        accessory.setExtraFeatures(req.getExtraFeatures());
-        accessory.setOriginalOrThirdparty(req.getOriginalOrThirdParty());
+        BoardGame boardGame = new BoardGame();
+        boardGame.setMinGameTime(req.getMinGameTime());
+        boardGame.setMaxGameTime(req.getMaxGameTime());
+        boardGame.setMinPlayerNumber(req.getMinPlayerNumber());
+        boardGame.setMaxPlayerNumber(req.getMaxPlayerNumber());
+        boardGame.setMinAge(req.getMinAge());
 
-        accessory = accessoryRepository.save(accessory);
+        boardGame = boardGameRepository.save(boardGame);
 
         Product product = new Product();
         product.setName(req.getName());
@@ -68,7 +67,7 @@ public class AccessoryImplementation implements IAccessoryService {
         product.setPrice(req.getPrice());
         product.setActive(true);
 
-        product.setAccessory(accessory);
+        product.setBoardGame(boardGame);
 
         if (req.getEditorsId() != null)
             product.setEditor(editorsRepository.findById(req.getEditorsId()).orElse(null));
@@ -80,35 +79,33 @@ public class AccessoryImplementation implements IAccessoryService {
             product.setListCategory(categoriesRepository.findAllById(req.getCategoryId()));
 
         productRepository.save(product);
-        log.debug("Product and Accessory successfully created!");
+        log.debug("Product and Board Game successfully created!");
     }// create
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void update(AccessoryRequest req) throws Exception {
+    public void update(BoardGameRequest req) throws Exception {
         if (req == null)
             throw new Exception("Request cannot be null");
 
-        if (req.getAccessoryId() == null)
+        if (req.getBoardGameId() == null)
             throw new Exception("Accessory ID cannot be null");
 
         if (req.getProductId() == null)
             throw new Exception("Product ID cannot be null");
 
-        Accessory accessory = accessoryRepository.findById(req.getAccessoryId())
-                .orElseThrow(() -> new Exception("Accessory not found with ID: " + req.getAccessoryId()));
+        BoardGame boardGame = boardGameRepository.findById(req.getBoardGameId())
+                .orElseThrow(() -> new Exception("Accessory not found with ID: " + req.getBoardGameId()));
 
         Product product = productRepository.findById(req.getProductId())
                 .orElseThrow(() -> new Exception("Product not found with ID: " + req.getProductId()));
 
-        accessory.setCompatibleWith(req.getCompatibleWith());
-        accessory.setColor(req.getColor());
-        accessory.setWireless(req.getWireless());
-        accessory.setBatteryLife(req.getBatteryLife());
-        accessory.setExtraFeatures(req.getExtraFeatures());
-        accessory.setOriginalOrThirdparty(req.getOriginalOrThirdParty());
+        boardGame.setMinGameTime(req.getMinGameTime());
+        boardGame.setMaxGameTime(req.getMaxGameTime());
+        boardGame.setMinPlayerNumber(req.getMinPlayerNumber());
+        boardGame.setMaxPlayerNumber(req.getMaxPlayerNumber());
+        boardGame.setMinAge(req.getMinAge());
 
-        accessoryRepository.save(accessory);
+        boardGame = boardGameRepository.save(boardGame);
 
         product.setName(req.getName());
         product.setDate(req.getDate());
@@ -126,11 +123,11 @@ public class AccessoryImplementation implements IAccessoryService {
         if (req.getCategoryId() != null && !req.getCategoryId().isEmpty())
             product.setListCategory(categoriesRepository.findAllById(req.getCategoryId()));
 
-        product.setAccessory(accessory);
+        product.setBoardGame(boardGame);
 
         productRepository.save(product);
 
-        log.debug("Accessory and Product successfully updated!");
+        log.debug("Board Game and Product successfully updated!");
     }// update
 
 }// class
