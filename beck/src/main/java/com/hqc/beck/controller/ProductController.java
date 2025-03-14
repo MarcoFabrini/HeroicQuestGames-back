@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hqc.beck.dto.ProductDTO;
@@ -48,31 +49,17 @@ public class ProductController {
         }
     }// getProductById
 
-    // @PostMapping("admin/product/create")
-    // public ResponseEntity<?> create(@RequestBody ProductRequest req) {
-    //     try {
-    //         productService.create(req);
-    //         return ResponseEntity.status(HttpStatus.CREATED)
-    //                 .body(Collections.singletonMap("message", "Game successfully CREATED!"));
-    //     } catch (Exception e) {
-    //         log.error("Error during the creation of the game: " + e.getMessage());
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(Collections.singletonMap("error", "Internal server error"));
-    //     }
-    // }// create
-
-    // @PutMapping("admin/product/update")
-    // public ResponseEntity<?> update(@RequestBody ProductRequest req) {
-    //     try {
-    //         productService.update(req);
-    //         return ResponseEntity.status(HttpStatus.OK)
-    //                 .body(Collections.singletonMap("message", "Product successfully UPDATED!"));
-    //     } catch (Exception e) {
-    //         log.error("Error during the update of the product: " + e.getMessage());
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(Collections.singletonMap("error", "Internal server error"));
-    //     }
-    // }// update
+    @GetMapping("/public/product/searchByName")
+    public ResponseEntity<?> searchByName(@RequestParam(required = false) String name){
+        try {
+            List<ProductDTO> list = productService.searchByName(name);
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "Internal server error"));
+        }
+    }// searchByName
 
     @DeleteMapping("admin/product/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {

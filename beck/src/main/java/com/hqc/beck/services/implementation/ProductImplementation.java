@@ -36,6 +36,12 @@ public class ProductImplementation implements IProductService {
     }// geProductById
 
     @Override
+    public List<ProductDTO> searchByName(String name) throws Exception {
+        List<Product> listProduct = productRepository.searchByName(name);
+        return buildProductDTO(listProduct);
+    }// searchByName
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Integer id) throws Exception {
         Optional<Product> product = productRepository.findById(id);
@@ -47,12 +53,4 @@ public class ProductImplementation implements IProductService {
         productRepository.save(product.get());
     }// delete
 
-    // @Override
-    // public List<GamesDTO> searchByTyping(String name, Integer authorsId, Integer
-    // categoriesId, Integer editorId)
-    // throws Exception {
-    // List<Games> listGames = gamesR.searchByTyping(name, authorsId, categoriesId,
-    // editorId);
-    // return buildGamesDTO(listGames);
-    // }// searchByTyping
 }// class
