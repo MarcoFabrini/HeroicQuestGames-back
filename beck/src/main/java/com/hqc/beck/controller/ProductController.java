@@ -38,7 +38,7 @@ public class ProductController {
                     .body(Collections.singletonMap("error", "Internal server error"));
         }
     }// list
-
+    
     @GetMapping("/public/product/{id}")
     public ResponseEntity<?> getProductById(@PathVariable Integer id) {
         try {
