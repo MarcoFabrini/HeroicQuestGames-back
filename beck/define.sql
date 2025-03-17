@@ -154,6 +154,7 @@
         stock_quantity integer not null,
         pubblication_date datetime(6),
         description TEXT,
+        image varchar(255),
         name varchar(255) not null,
         primary key (id)
     ) engine=InnoDB;

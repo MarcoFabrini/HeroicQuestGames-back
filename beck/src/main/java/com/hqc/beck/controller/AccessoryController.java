@@ -35,6 +35,8 @@ public class AccessoryController {
         }
     }// create
 
+    
+
     @PutMapping("/admin/accessory/update")
     public ResponseEntity<?> update(@RequestBody AccessoryRequest req) {
         try {

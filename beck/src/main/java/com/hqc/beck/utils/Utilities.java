@@ -172,6 +172,7 @@ public class Utilities {
         p.getDescription(),
         p.getStockQuantity(),
         p.getPrice(),
+        p.getImageUrl(),
         p.getActive(),
         p.getEditor() != null ? buildEditorsDTO(p.getEditor()) : null,
         p.getListAuthors() != null ? buildAuthorsDTO(p.getListAuthors()) : null,
@@ -188,7 +189,12 @@ public class Utilities {
         .map(p -> new ProductDTO(
             p.getId(),
             p.getName(),
-            p.getPrice()))
+            p.getPrice(),
+            p.getImageUrl(),
+            p.getBoardGame() != null ? buildBoardGameDTO(p.getBoardGame()) : null,
+            p.getConsole() != null ? buildConsoleDTO(p.getConsole()) : null,
+            p.getCollectibleCard() != null ? buildCollectibleCardDTO(p.getCollectibleCard()) : null,
+            p.getAccessory() != null ? buildAccessoryDTO(p.getAccessory()) : null))
         .collect(Collectors.toList());
   }// List buildProductDTO
 

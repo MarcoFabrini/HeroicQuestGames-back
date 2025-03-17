@@ -50,6 +50,9 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
+    @Column(name = "image")
+    private String imageUrl;
+
     @Column(name = "active")
     private Boolean active;
 
