@@ -50,9 +50,6 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "image")
-    private String imageUrl;
-
     @Column(name = "active")
     private Boolean active;
 
@@ -99,4 +96,7 @@ public class Product {
     @JsonIgnore
     private List<DetailsOrder> listDetailsOrder;
 
+    @OneToMany(mappedBy="product", fetch = FetchType.LAZY)
+    private List<Image> listImage;
+    
 }// class

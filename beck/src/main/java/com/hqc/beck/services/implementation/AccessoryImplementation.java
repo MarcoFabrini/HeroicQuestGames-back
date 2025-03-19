@@ -1,16 +1,14 @@
 package com.hqc.beck.services.implementation;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.hqc.beck.model.Accessory;
+import com.hqc.beck.model.Authors;
+import com.hqc.beck.model.Categories;
 import com.hqc.beck.model.Product;
 import com.hqc.beck.repository.IAccessoryRepository;
 import com.hqc.beck.repository.IAuthorsRepository;
@@ -76,41 +74,30 @@ public class AccessoryImplementation implements IAccessoryService {
 
         product.setAccessory(accessory);
 
-        if (req.getEditorsId() != null)
-            product.setEditor(editorsRepository.findById(req.getEditorsId()).orElse(null));
+        // Associare Editor solo se esiste
+        if (req.getEditorsId() != null) {
+            editorsRepository.findById(req.getEditorsId()).ifPresent(product::setEditor);
+        }
 
-        if (req.getAuthorsId() != null && !req.getAuthorsId().isEmpty())
-            product.setListAuthors(authorsRepository.findAllById(req.getAuthorsId()));
+        // Associare Autori solo se esistono
+        if (req.getAuthorsId() != null && !req.getAuthorsId().isEmpty()) {
+            List<Authors> authors = authorsRepository.findAllById(req.getAuthorsId());
+            if (!authors.isEmpty()) {
+                product.setListAuthors(authors);
+            }
+        }
 
-        if (req.getCategoryId() != null && !req.getCategoryId().isEmpty())
-            product.setListCategory(categoriesRepository.findAllById(req.getCategoryId()));
-
-        if (req.getImage() != null && !req.getImage().isEmpty()) {
-            String imageUrl = saveImage(req.getImage()); // Chiama il metodo di salvataggio
-            product.setImageUrl(imageUrl); // Salva il percorso nel prodotto
+        // Associare Categorie solo se esistono
+        if (req.getCategoryId() != null && !req.getCategoryId().isEmpty()) {
+            List<Categories> categories = categoriesRepository.findAllById(req.getCategoryId());
+            if (!categories.isEmpty()) {
+                product.setListCategory(categories);
+            }
         }
 
         productRepository.save(product);
         log.debug("Product and Accessory successfully created!");
     }// create
-
-    private String saveImage(MultipartFile file) throws Exception {
-        // Cartella dove salvare le immagini
-        String uploadDir = "uploads/";
-        File directory = new File(uploadDir);
-        if (!directory.exists()) {
-            directory.mkdirs(); // Crea la cartella se non esiste
-        }
-
-        // Genera un nome univoco per il file
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        String filePath = uploadDir + fileName;
-        Path path = Paths.get(filePath);
-        Files.write(path, file.getBytes());
-
-        // Restituisce l'URL per recuperare l'immagine dal backend
-        return "/api/products/image/" + fileName;
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

@@ -119,6 +119,13 @@
         primary key (id)
     ) engine=InnoDB;
 
+    create table image (
+        id integer not null auto_increment,
+        id_product integer,
+        url TEXT,
+        primary key (id)
+    ) engine=InnoDB;
+
     create table orders (
         id integer not null auto_increment,
         id_pay_cards integer,
@@ -154,7 +161,6 @@
         stock_quantity integer not null,
         pubblication_date datetime(6),
         description TEXT,
-        image varchar(255),
         name varchar(255) not null,
         primary key (id)
     ) engine=InnoDB;
@@ -250,6 +256,11 @@
        add constraint FKlor977jsas5s5r376wsp8mt7d 
        foreign key (id_users) 
        references users (id);
+
+    alter table image 
+       add constraint FKebv5p4e8gjysj4vdgkom261ru 
+       foreign key (id_product) 
+       references product (id);
 
     alter table orders 
        add constraint FKrlv1mu9c3hmlvlxmfeu1gg57t 

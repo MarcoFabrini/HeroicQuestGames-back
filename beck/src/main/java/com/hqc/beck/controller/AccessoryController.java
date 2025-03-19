@@ -2,6 +2,7 @@ package com.hqc.beck.controller;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,9 @@ import com.hqc.beck.services.interfaces.IAccessoryService;
 @RequestMapping("/api")
 @RestController
 public class AccessoryController {
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     private final IAccessoryService accessoryService;
 
@@ -34,8 +38,6 @@ public class AccessoryController {
                     .body(Collections.singletonMap("error", "Internal server error"));
         }
     }// create
-
-    
 
     @PutMapping("/admin/accessory/update")
     public ResponseEntity<?> update(@RequestBody AccessoryRequest req) {

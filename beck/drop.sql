@@ -39,6 +39,10 @@
        drop 
        foreign key FKlor977jsas5s5r376wsp8mt7d;
 
+    alter table image 
+       drop 
+       foreign key FKebv5p4e8gjysj4vdgkom261ru;
+
     alter table orders 
        drop 
        foreign key FKrlv1mu9c3hmlvlxmfeu1gg57t;
@@ -104,6 +108,8 @@
     drop table if exists details_shipping;
 
     drop table if exists editors;
+
+    drop table if exists image;
 
     drop table if exists orders;
 

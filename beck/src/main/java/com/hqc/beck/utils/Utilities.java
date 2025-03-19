@@ -19,6 +19,7 @@ import com.hqc.beck.dto.DetailsCartDTO;
 import com.hqc.beck.dto.DetailsOrderDTO;
 import com.hqc.beck.dto.DetailsShippingDTO;
 import com.hqc.beck.dto.EditorsDTO;
+import com.hqc.beck.dto.ImageDTO;
 import com.hqc.beck.dto.OrdersDTO;
 import com.hqc.beck.dto.PayCardsDTO;
 import com.hqc.beck.dto.ProductDTO;
@@ -35,6 +36,7 @@ import com.hqc.beck.model.DetailsCart;
 import com.hqc.beck.model.DetailsOrder;
 import com.hqc.beck.model.DetailsShipping;
 import com.hqc.beck.model.Editors;
+import com.hqc.beck.model.Image;
 import com.hqc.beck.model.Orders;
 import com.hqc.beck.model.PayCards;
 import com.hqc.beck.model.Product;
@@ -172,7 +174,6 @@ public class Utilities {
         p.getDescription(),
         p.getStockQuantity(),
         p.getPrice(),
-        p.getImageUrl(),
         p.getActive(),
         p.getEditor() != null ? buildEditorsDTO(p.getEditor()) : null,
         p.getListAuthors() != null ? buildAuthorsDTO(p.getListAuthors()) : null,
@@ -181,7 +182,8 @@ public class Utilities {
         p.getBoardGame() != null ? buildBoardGameDTO(p.getBoardGame()) : null,
         p.getConsole() != null ? buildConsoleDTO(p.getConsole()) : null,
         p.getCollectibleCard() != null ? buildCollectibleCardDTO(p.getCollectibleCard()) : null,
-        p.getAccessory() != null ? buildAccessoryDTO(p.getAccessory()) : null);
+        p.getAccessory() != null ? buildAccessoryDTO(p.getAccessory()) : null,
+        p.getListImage() != null ? buildImageDTO(p.getListImage()) : null);
   }// buildProductDTO
 
   public static List<ProductDTO> buildProductDTO(List<Product> pr) {
@@ -190,11 +192,11 @@ public class Utilities {
             p.getId(),
             p.getName(),
             p.getPrice(),
-            p.getImageUrl(),
             p.getBoardGame() != null ? buildBoardGameDTO(p.getBoardGame()) : null,
             p.getConsole() != null ? buildConsoleDTO(p.getConsole()) : null,
             p.getCollectibleCard() != null ? buildCollectibleCardDTO(p.getCollectibleCard()) : null,
-            p.getAccessory() != null ? buildAccessoryDTO(p.getAccessory()) : null))
+            p.getAccessory() != null ? buildAccessoryDTO(p.getAccessory()) : null,
+            p.getListImage() != null ? buildImageDTO(p.getListImage()) : null))
         .collect(Collectors.toList());
   }// List buildProductDTO
 
@@ -243,6 +245,15 @@ public class Utilities {
         a.getExtraFeatures(),
         a.getOriginalOrThirdparty());
   }// builAccessoryDTO
+
+  public static List<ImageDTO> buildImageDTO(List<Image> listImage){
+    return listImage.stream()
+      .map(i -> new ImageDTO(
+        i.getId(),
+        i.getUrl()
+      ))
+      .collect(Collectors.toList());
+  }// buildImageDTO
 
   // builder per farsi restituire un OrdersDTO
   public final static OrdersDTO buildOrdersDTO(Orders o) {

@@ -24,7 +24,6 @@ public class ProductDTO {
     private String description;
     private Integer stockQuantity;
     private Double price;
-    private String imageUrl;
     private Boolean active;
 
     private EditorsDTO editorDTO;
@@ -37,16 +36,18 @@ public class ProductDTO {
     private CollectibleCardDTO collectibleCardDTO;
     private AccessoryDTO accessoryDTO;
 
-    public ProductDTO(Integer productId, String name, Double price, String imageUrl, BoardGameDTO boardGameDTO, ConsoleDTO consoleDTO,
-            CollectibleCardDTO collectibleCardDTO, AccessoryDTO accessoryDTO) {
+    private List<ImageDTO> listImageDTO;
+
+    public ProductDTO(Integer productId, String name, Double price, BoardGameDTO boardGameDTO, ConsoleDTO consoleDTO,
+            CollectibleCardDTO collectibleCardDTO, AccessoryDTO accessoryDTO, List<ImageDTO> listImageDTO) {
         this.productId = productId;
         this.name = name;
         this.price = price;
-        this.imageUrl = imageUrl;
         this.boardGameDTO = boardGameDTO;
         this.consoleDTO = consoleDTO;
         this.collectibleCardDTO = collectibleCardDTO;
         this.accessoryDTO = accessoryDTO;
+        this.listImageDTO = listImageDTO;
     }
 
 }// class

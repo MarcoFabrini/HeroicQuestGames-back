@@ -3,8 +3,6 @@ package com.hqc.beck.request;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -26,7 +24,7 @@ public class ProductRequest {
     private String description;
     private Integer stockQuantity;
     private Double price;
-    private MultipartFile image;
+    private String image;
     private Boolean active;
 
     private Integer editorsId;
