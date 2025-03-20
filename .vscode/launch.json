@@ -2,11 +2,18 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-BeckApplication<beck>",
+            "name": "BackApplication",
+            "request": "launch",
+            "mainClass": "com.hqc.back.BackApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BackApplication<back>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.hqc.beck.BeckApplication",
-            "projectName": "beck",
+            "mainClass": "com.hqc.back.BackApplication",
+            "projectName": "back",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
