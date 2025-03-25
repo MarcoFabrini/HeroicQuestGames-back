@@ -13,5 +13,5 @@ public interface IImageService {
 
     Resource getImage(String filename) throws Exception;
 
-    // void deleteImage() throws Exception;
+    void deleteImage(ImageRequest req) throws Exception;
 }// interface

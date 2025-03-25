@@ -15,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ImageRequest {
+    private Integer imageId;
     private Integer productId;
     private MultipartFile file;
 }

@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,4 +57,14 @@ public class ImageController {
             return ResponseEntity.notFound().build();
         }
     }// getImage
+
+    @DeleteMapping("/public/images/product/delete")
+    public ResponseEntity<?> deleteImage(@RequestBody ImageRequest req) {
+        try {
+            imageService.deleteImage(req);
+            return ResponseEntity.ok("Image deleted");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }// getImagesByProductId
 }// class

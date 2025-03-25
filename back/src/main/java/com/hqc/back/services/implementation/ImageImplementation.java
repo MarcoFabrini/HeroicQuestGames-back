@@ -7,13 +7,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hqc.back.model.Image;
@@ -32,6 +35,8 @@ public class ImageImplementation implements IImageService {
     private IProductRepository productRepository;
     @Autowired
     private IImageRepository imageRepository;
+    @Autowired
+    private Logger log;
 
     @Override
     public void uploadImage(ImageRequest req) throws Exception {
@@ -80,8 +85,7 @@ public class ImageImplementation implements IImageService {
 
     private String saveImage(MultipartFile file, Product product) throws Exception {
         Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)){
-            System.out.println("directory non trovata");
+        if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
         // Ottenere il numero di file già presenti con lo stesso nome base
@@ -108,5 +112,32 @@ public class ImageImplementation implements IImageService {
 
         return filePath.toString();
     }// saveImage
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteImage(ImageRequest req) throws Exception {
+        Optional<Image> imageOptional = imageRepository.findById(req.getImageId());
+
+        if (!imageOptional.isPresent())
+            throw new Exception("Image not found");
+
+        Image image = imageOptional.get();
+        Path filePath = Paths.get(image.getUrl()); // Ottieni il percorso del file
+
+        try {
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+                log.debug("File eliminato con successo: " + filePath);
+            } else {
+                log.debug("File non trovato: " + filePath);
+            }
+        } catch (Exception e) {
+            throw new Exception("Errore nell'eliminazione del file: " + e.getMessage(), e);
+        }
+
+        // Elimina il record dal database
+        imageRepository.delete(image);
+        log.debug("Immagine eliminata dal database con ID: " + req.getImageId());
+    }// deleteImage
 
 }// class
